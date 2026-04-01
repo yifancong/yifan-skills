@@ -1,0 +1,5 @@
+version: 1
+interface:
+  display_name: Axios to Fetch Migration
+  short_description: Migrate JavaScript/TypeScript code from axios to fetch safely.
+  default_prompt: Use this skill to migrate axios usage to fetch while preserving behavior, normalizing errors, and validating with tests.
