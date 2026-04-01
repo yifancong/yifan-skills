@@ -15,7 +15,33 @@
 4. `response.data` convenience is absent; parse explicitly (`json/text/blob`).
 5. Error shapes differ significantly; normalize to app contract.
 6. In browser, cookie behavior depends on `credentials` option.
-7. In Node.js, ensure runtime supports `fetch` (Node 18+ or polyfill).
+7. In Node.js, ensure runtime supports `fetch`.
+
+   - Node 18+: `fetch` is available globally.
+   - Node 16 (no global `fetch`): use `undici` (recommended).
+
+   Option A (preferred): keep your wrapper using `undici` directly (avoids global mutation):
+
+   ```js
+   // http.ts / http.js
+   import { fetch } from 'undici';
+   // ...build your wrapper on top of `fetch`
+   ```
+
+   Option B: polyfill globals once in your app entrypoint (must run before any `fetch(...)` usage):
+
+   ```js
+   // fetch-polyfill.js (imported once at startup)
+   import { fetch, Headers, Request, Response, FormData } from 'undici';
+
+   if (!globalThis.fetch) {
+     Object.assign(globalThis, { fetch, Headers, Request, Response, FormData });
+   }
+   ```
+
+   Notes:
+   - For Node 16, prefer `undici@5` (newer majors may require Node 18+).
+   - If you polyfill globals in TypeScript, ensure your types know about Fetch (either import from `undici` in the wrapper, or configure types accordingly).
 
 ## Interceptors migration
 
