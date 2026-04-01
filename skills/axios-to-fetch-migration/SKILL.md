@@ -35,6 +35,15 @@ Prefer one of these:
 
 Default to strangler for medium/large repos.
 
+## 2.5) Ensure `fetch` is available in your runtime (Node.js)
+
+Before migrating lots of call sites, confirm your runtime actually provides `fetch`.
+
+- Node 18+: `fetch` is available globally.
+- Node 16: add a polyfill (recommended: `undici@5`) or build your wrapper on top of `undici`.
+
+Details and copy/paste snippets: `references/migration-checklist.md`.
+
 ## 3) Establish a fetch wrapper before mass edits
 
 Create one shared HTTP utility that normalizes behavior.
