@@ -1,0 +1,5 @@
+version: 1
+interface:
+  display_name: Evaluate Skill Quality
+  short_description: Score and review a skill package against a 75-point quality and security rubric.
+  default_prompt: Use this skill to audit a skill folder, compute category scores, classify P0/P1/P2 findings, and produce a release-readiness report.

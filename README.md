@@ -7,6 +7,7 @@ A small collection of reusable agent “skills” for Codex-style workflows.
 | Skill | What it helps with | Install |
 | --- | --- | --- |
 | Axios to Fetch Migration | Migrate JavaScript/TypeScript codebases from `axios` to `fetch` with behavior-preserving refactors and test-first validation. | `npx skills add yifancong/yifan-skills --path skills/axios-to-fetch-migration` |
+| Evaluate Skill Quality | Audit a skill package with a 75-point rubric and report `P0/P1/P2` risks across security, frontmatter, structure, resources, markdown, quality, and scripts. | `npx skills add yifancong/yifan-skills --path skills/evaluate-skill-quality` |
 | Write RFC | Draft clear, review-ready engineering RFCs from partial or messy inputs using a strict, senior-review oriented structure. | `npx skills add yifancong/yifan-skills --path skills/write-rfc` |
 
 ## Quick start
