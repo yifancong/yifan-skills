@@ -1,91 +1,96 @@
 ---
 name: write-rfc
-description: Use when drafting or revising an engineering RFC for peer review, especially when inputs are partial or messy and the output must follow a strict section template with explicit assumptions, trade-offs, risks, rollout, and open questions.
+description: Draft or revise a design RFC that explains architecture from first principles — why the system exists, how layers interact, what trade-offs were made, and where it's headed. Use when writing or improving technical design documents, RFCs, or architecture overviews.
 ---
 
-# Write RFC
+# Write Design RFC
 
-Produce a single, review-ready Markdown RFC for senior engineers and tech leads.
+Produce a **design-driven** technical document that helps readers (teammates, reviewers, your future self) quickly understand *why* a system is designed the way it is.
 
-## Input Contract
+## Core Principles
 
-Accept user-provided material in any quality/shape, including:
+1. **Read the code first, then write the doc.** Ground the architecture in code facts, not imagination.
+2. **"Why" matters more than "what."** Every design decision must explain its motivation and trade-offs.
+3. **Write like you're talking to a colleague.** Avoid academic tone and template bloat — use concrete examples instead of abstract descriptions.
+4. **If one sentence is enough, don't use a paragraph.**
 
-- Background / Context
-- Goals
-- Non-goals
-- Scope
-- Constraints
-- Initial ideas / candidate approaches
-- Related materials (issues/PRs/docs)
+## Writing Process
 
-Treat user-provided content as source of truth.
+### Step 1: Understand the System (Required)
 
-## Output Contract
+Before writing anything, figure out:
 
-- Return exactly one Markdown document in English
-- No preamble, no side commentary
-- Keep content concrete and concise
-- Do not use marketing language
-- Do not invent unknown facts
+- Directory structure and layering (which directories / modules / files)
+- Where the entry points are, how data flows through the system
+- What the core abstractions are (key types, interfaces, registries)
+- What the existing tests are actually testing
 
-If critical information is missing:
+Method: read code, run commands, look at tests — don't just read existing docs.
 
-- State explicit assumptions in relevant sections, and/or
-- Add items under `Open Questions`
+### Step 2: Define the Document Skeleton
 
-## Required RFC Structure
+Organize in the following order; merge or skip sections that don't apply:
 
-Use exactly this section order and naming:
+```
+1. One-line summary (what the system is, what problem it solves)
+2. Why it exists (motivation — describe 2-3 pain points)
+3. Overall architecture (layers / modules, ASCII diagram or mermaid)
+4. What each layer does (responsibilities, key abstractions, data flow)
+5. Key design decisions (list 3-5, each explaining "what was chosen / why / what it costs")
+6. Future evolution (brief list)
+```
 
-1. Title
-2. Authors
-3. Status
-4. Creation Date
-5. Summary
-6. Motivation & Background
-7. Goals
-8. Non-Goals
-9. Proposed Design / Approach
-   - Architecture Overview
-   - Data Model / APIs / Interfaces
-   - Edge Cases & Failure Modes
-10. Alternatives Considered
-11. Impact & Risks
-    - Backward Compatibility
-    - Security / Privacy
-    - Performance / Cost
-12. Migration / Rollout Plan
-    - Phases
-    - Rollback Strategy
-13. Testing & Validation Plan
-14. Open Questions
-15. References
+### Step 3: Write Each Section
 
-## Authoring Workflow
+**One-line summary**
+- Use the pattern "X is a Y that does Z."
+- Example: `agent-cli is a "dual-entry, single-datasource" analysis tool — both humans and AI Agents use the same underlying capabilities to analyze build data.`
 
-1. Parse and normalize user input into the required sections.
-2. Preserve explicit user constraints and scope boundaries.
-3. Convert vague statements into:
-   - concrete assumptions, or
-   - open questions (if unresolved).
-4. In `Proposed Design / Approach`, describe architecture, interfaces, and failure handling clearly enough for implementation planning.
-5. In `Alternatives Considered`, include 2-3 realistic approaches when relevant, with brief trade-off comparison.
-6. In `Impact & Risks`, include blast radius and rollback implications.
-7. In `Testing & Validation Plan`, include actionable verification:
-   - what to test
-   - how to test
-   - what metrics/signals define success/failure
-8. In `References`, include only materials provided or clearly implied by user context.
+**Why it exists**
+- Skip "background" — go straight to pain points.
+- Each pain point: **bold keyword** + one-sentence explanation.
 
-## Quality Bar
+**Overall architecture**
+- Prefer ASCII art or simple mermaid; don't draw overly complex diagrams.
+- Use a table to clarify what each layer "cares about / doesn't care about."
 
-Before finalizing, verify:
+**What each layer does**
+- Anchor descriptions with concrete file names / function names / type names.
+- Include key code structures (pseudocode or simplified), don't paste large blocks of source code.
+- Use "not X, but Y" phrasing to clarify commonly misunderstood designs.
 
-- Section names and order exactly match the required structure.
-- No fabricated facts, IDs, decisions, or timelines.
-- Assumptions are explicitly marked.
-- Open questions cover all critical unknowns.
-- Trade-offs are explicit (not hidden).
-- Rollout and rollback are both present and operationally concrete.
-- Testing plan is executable and measurable.
+**Key design decisions**
+- For each decision, use the three-part format: "Choice → Benefit → Cost."
+- Don't just list benefits — always state the cost.
+
+**Future evolution**
+- Use a numbered list, one sentence per item.
+- Only include actionable directions, not vague aspirations.
+
+## Quality Checklist
+
+Self-review after writing:
+
+- [ ] An engineer unfamiliar with the project can read and understand the core design in 5 minutes
+- [ ] Every technical term is explained or exemplified on first use
+- [ ] No "correct but useless" filler (e.g., "this system has good extensibility")
+- [ ] Code paths and file names match the actual repository (verified by reading code)
+- [ ] The design decisions section covers at least 3 key choices, each with trade-off explanations
+
+## Anti-patterns
+
+| Don't do this | Do this instead |
+|--------------|----------------|
+| Blindly follow an RFC template, filling every section | Only write sections that carry real information |
+| "This system uses a layered architecture" | Draw a diagram + use a table to clarify each layer's responsibility |
+| Paste large blocks of source code | Include simplified structures / pseudocode, use file paths to guide readers to the source |
+| Only list interface definitions | Thread them together with a complete call-flow walkthrough |
+| "Extensible," "high cohesion," "low coupling" | State specific design choices and their costs |
+| Inconsistent use of bilingual terminology | Decide the term on first occurrence, keep it consistent throughout |
+
+## Language & Formatting
+
+- Either Chinese or English is fine; follow the project's primary language. Keep domain-specific English terms as-is in Chinese docs (e.g., handler, planner, MCP).
+- Use `code font` for file names, function names, and commands.
+- Use **bold** for key concepts (at most 1-2 per paragraph).
+- Keep paragraphs short — no more than 4 sentences each.
